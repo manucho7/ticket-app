@@ -31,7 +31,7 @@ export const Ingresar = () => {
     return (
         <>
             <Title label={2}>Ingresar</Title>
-            <Text>Ingrese su identificador de escritorio</Text>
+            <Text>Ingrese su número de escritorio</Text>
             <Divider />
 
             <Form
