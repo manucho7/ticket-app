@@ -1,12 +1,15 @@
 import React from 'react';
+import { SocketProvider } from './context/SocketContext';
 import { UIProvider } from './context/UIContext';
 import { RouterPage } from './pages/RouterPage';
 
 export const TicketApp = () => {
 
     return (
-        <UIProvider>
-            <RouterPage />
-        </UIProvider>
+        <SocketProvider>
+            <UIProvider>
+                <RouterPage />
+            </UIProvider>
+        </SocketProvider>
     )
 }
