@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Redirect, useHistory } from 'react-router-dom';
+import { SocketContext } from '../context/SocketContext';
+import { useHideMenu } from '../hooks/useHideMenu';
+
 import { Button, Col, Divider, Row, Typography } from 'antd';
 import { CloseCircleOutlined, RightOutlined } from '@ant-design/icons';
-import { useHideMenu } from '../hooks/useHideMenu';
 import { getUsuarioStorage } from '../helpers/getUsuarioStorage';
-import { Redirect, useHistory } from 'react-router-dom';
 
 const { Title, Text } = Typography
 
 export const Escritorio = () => {
 
+    const [ usuario ] = useState( getUsuarioStorage() );
+    const { socket } = useContext(SocketContext);
+    const [ticket, setTicket] = useState(null);
+
     const history = useHistory();
 
     useHideMenu(false);
 
-    const [usuario] = useState( getUsuarioStorage() );
 
     const salir = () => {
         localStorage.clear();
@@ -22,7 +27,10 @@ export const Escritorio = () => {
     }
 
     const siguienteTicket = () => {
-        console.log('Siguiente ticket');
+        console.log(usuario);
+        socket.emit('siguiente-ticket', usuario, (ticket) => {
+            setTicket(ticket);
+        });
     }
 
     if (!usuario.agente || !usuario.escritorio) {
@@ -52,17 +60,22 @@ export const Escritorio = () => {
 
             <Divider />
 
-            <Row>
-                <Col>
-                    <Text>Está atendiendo el ticket número: </Text>
-                    <Text 
-                        style={{fontSize: 30}} 
-                        type="danger"
-                    >
-                        55
-                    </Text>
-                </Col>
-            </Row>
+            {
+                ticket && (
+                    <Row>
+                        <Col>
+                            <Text>Está atendiendo el ticket número: </Text>
+                            <Text 
+                                style={{fontSize: 30}} 
+                                type="danger"
+                            >
+                                { ticket.number }
+                            </Text>
+                        </Col>
+                    </Row>
+                )
+            }
+
 
             <Row>
                 <Col offset={18} span={6} align="right">
