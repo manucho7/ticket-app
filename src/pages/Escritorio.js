@@ -27,7 +27,7 @@ export const Escritorio = () => {
     }
 
     const siguienteTicket = () => {
-        console.log(usuario);
+
         socket.emit('siguiente-ticket', usuario, (ticket) => {
             setTicket(ticket);
         });
